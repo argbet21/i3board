@@ -1,6 +1,17 @@
 use bevy::{input::keyboard::KeyboardInput, prelude::*};
 
-// This system prints out all keyboard events as they come in
+pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((Camera3dBundle {
+        transform: Transform::from_xyz(1.7, 0.7, 1.0).looking_at(Vec3::new(0.0, 0.3, 0.0), Vec3::Y),
+        ..default()
+    },));
+
+    commands.spawn(SceneBundle {
+        scene: asset_server.load("models/keyboard/keyboard_final_raw.glb#Scene0"),
+        ..default()
+    });
+}
+
 pub fn print_keyboard_event_system(mut keyboard_input_events: EventReader<KeyboardInput>) {
     for event in keyboard_input_events.read() {
         info!("{:?}", event);
