@@ -36,3 +36,20 @@ terminal.addEventListener("keypress", (event) => {
     terminal_input.focus();
   }
 });
+
+// Disables previous `input`'s to disallow editing after pressing `Enter`
+terminal.addEventListener("keypress", (event) => {
+  // Check if the key pressed is 'Enter'
+  if (event.key === "Enter") {
+    // Disable the previous inputs
+    Array.from(terminal_inputs).forEach((input, index, array) => {
+      if (index === array.length - 1) {
+        // This is the last element, so ensure it's enabled
+        input.disabled = false;
+      } else {
+        // This is not the last element, so disable it
+        input.disabled = true;
+      }
+    });
+  }
+});
