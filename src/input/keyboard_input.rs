@@ -16,6 +16,7 @@ pub fn handle_keyboard_event(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {
+    // Press'n'Release start
     // An internal function to see if you *really* pressed a key IRL.
     if key.just_pressed(KeyCode::Digit0) {
         // And if so, iterate through all the entities in our scene
@@ -47,10 +48,95 @@ pub fn handle_keyboard_event(
                 transform.translation.y += 0.05;
 
                 commands.spawn(AudioBundle {
-                    source: asset_server.load("audio/sfx/keyboard_released/keys.ogg"),
+                    source: asset_server.load("audio/sfx/keyboard_released/key.ogg"),
                     ..default()
                 });
             }
         }
     }
+    // Press'n'Release end
+
+    // Press'n'Release start
+    if key.just_pressed(KeyCode::Backspace) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "backspace" {
+                transform.translation.y -= 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_pressed/backspace.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+
+    if key.just_released(KeyCode::Backspace) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "backspace" {
+                transform.translation.y += 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_released/backspace.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+    // Press'n'Release end
+
+    // Press'n'Release start
+    if key.just_pressed(KeyCode::Enter) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "enter" {
+                transform.translation.y -= 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_pressed/enter.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+
+    if key.just_released(KeyCode::Enter) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "enter" {
+                transform.translation.y += 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_released/enter.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+    // Press'n'Release end
+
+    // Press'n'Release start
+    if key.just_pressed(KeyCode::Space) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "spacebar" {
+                transform.translation.y -= 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_pressed/spacebar.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+
+    if key.just_released(KeyCode::Space) {
+        for (name, mut transform) in query.iter_mut() {
+            if name.as_str() == "spacebar" {
+                transform.translation.y += 0.05;
+
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("audio/sfx/keyboard_released/spacebar.ogg"),
+                    ..default()
+                });
+            }
+        }
+    }
+    // Press'n'Release end
 }
