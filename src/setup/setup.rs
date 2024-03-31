@@ -31,7 +31,7 @@ pub fn spawn_light(mut commands: Commands) {
 
 pub fn spawn_keyboard(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SceneBundle {
-        scene: asset_server.load("models/keyboard/keyboard.glb#Scene0"),
+        scene: asset_server.load("models/keyboard.glb#Scene0"),
         transform: Transform {
             rotation: Quat::from_rotation_y(PI / 2.0),
             ..default()
