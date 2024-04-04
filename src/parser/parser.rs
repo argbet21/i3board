@@ -1,4 +1,4 @@
-use bevy::input::keyboard::KeyCode;
+use bevy::{input::keyboard::KeyCode, prelude::*};
 
 // Notes:
 // The iterator's of the below 2 types - `KeyCodeWrapper` and `Keys` - should have the order of the values they're iterating over in-sync.
@@ -226,5 +226,28 @@ impl Keys {
             "numpad_.",
         ]
         .into_iter()
+    }
+}
+
+// This component is used as a "marker" component
+#[derive(Component, Debug)]
+pub struct Key;
+
+pub fn mark_entities(
+    mut commands: Commands,
+    query: Query<(Entity, &Name), (Added<Name>, Without<Key>)>,
+) {
+    for (entity, blender_key) in query.iter() {
+        // `any()` tests if any element of an iterator matches a predicate.
+        // `any()` takes a closure that returns `true` or `false`.
+        // It applies this closure to each element of the iterator, and if any of them return `true`, then so does `any()`.
+        // If they all return `false`, it returns `false`.
+        // `any()` is short-circuiting; in other words, it will stop processing as soon as it finds a `true`.
+        // In our case, `any()` tests if any mesh in our Blender scene has a name equal to that of *our definition* of a `Key`.
+
+        if Keys::into_iter().any(|key| blender_key.as_str() == key) {
+            // println!("Marked entity {:?} with the `Key` component", entity);
+            commands.entity(entity).insert(Key);
+        };
     }
 }
