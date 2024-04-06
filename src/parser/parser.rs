@@ -1,9 +1,19 @@
 use bevy::{input::keyboard::KeyCode, prelude::*};
 
+// Parsing:
+//
+// Keys have predetermined names in Blender. We map those to sequential ID's in Rust.
+// We do this to get a range (0..104) of keys that we can iterate over.
+// The alternative to a single contiguous range is a set of non-contiguous ranges (e.g., { 0..=9, a..=z, ..etc }).
+// This causes a number of issues as it adds:
+//      1. Complexity: How would an implementation of keys that do not implement the `Range` trait look like? (e.g., f1..=f12, arrow keys, ..etc).
+//          1a. Furthermore, this causes overlapping ID values if the non-contiguous ranges use the same start value.
+//      2. Code Duplication: The core logic for every key is the same. Having multiple ranges violates the DRY principle.
+//
 // Notes:
-// The iterator's of the below 2 types - `KeyCodeWrapper` and `Keys` - should have the order of the values they're iterating over in-sync.
-// This is necessary as the implementation regarding _ depends on it.
-pub struct KeyCodeWrapper(KeyCode);
+// The iterator's of the below 2 types - `KeyCodeWrapper` and `Keys` - should have the order of the values they're iterating over *in-sync*.
+// This is necessary as we use their indices as the "common ground" to map between the blender key meshes to their respective `KeyCode` and vice-versa.
+pub struct KeyCodeWrapper;
 impl KeyCodeWrapper {
     pub fn into_iter() -> std::array::IntoIter<KeyCode, 104> {
         [
@@ -229,9 +239,12 @@ impl Keys {
     }
 }
 
-// This component is used as a "marker" component
-#[derive(Component, Debug)]
-pub struct Key;
+// A component used to identify entities that are keys
+#[derive(Component)]
+pub struct Key {
+    pub entity: Entity,
+    pub name: String,
+}
 
 pub fn mark_entities(
     mut commands: Commands,
@@ -244,10 +257,11 @@ pub fn mark_entities(
         // If they all return `false`, it returns `false`.
         // `any()` is short-circuiting; in other words, it will stop processing as soon as it finds a `true`.
         // In our case, `any()` tests if any mesh in our Blender scene has a name equal to that of *our definition* of a `Key`.
-
         if Keys::into_iter().any(|key| blender_key.as_str() == key) {
-            // println!("Marked entity {:?} with the `Key` component", entity);
-            commands.entity(entity).insert(Key);
+            commands.entity(entity).insert(Key {
+                entity,
+                name: String::from(blender_key.as_str()),
+            });
         };
     }
 }
