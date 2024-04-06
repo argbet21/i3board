@@ -1,5 +1,5 @@
 use crate::{
-    audio::audio::play_audio,
+    audio::audio::{play_audio, AudioMode},
     parser::parser::{Key, KeyCodeWrapper, Keys},
 };
 use bevy::prelude::*;
@@ -32,7 +32,7 @@ pub fn handle_keyboard_event(
             for (entity, key, mut transform) in query.iter_mut() {
                 if key.name == pressed_key.unwrap().as_str() {
                     transform.translation.y -= 0.05;
-                    play_audio(entity, &mut commands, &asset_server);
+                    play_audio(entity, &mut commands, &asset_server, AudioMode::Pressed);
                 }
             }
         }
@@ -44,7 +44,7 @@ pub fn handle_keyboard_event(
             for (entity, key, mut transform) in query.iter_mut() {
                 if key.name == released_key.unwrap().as_str() {
                     transform.translation.y += 0.05;
-                    play_audio(entity, &mut commands, &asset_server);
+                    play_audio(entity, &mut commands, &asset_server, AudioMode::Released);
                 }
             }
         }
