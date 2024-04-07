@@ -26,7 +26,7 @@ pub fn handle_keyboard_event(
         if key.just_pressed(keycode) {
             // Get the entity corresponding to the pressed `KeyCode`.
             // Note that this works because the iterators - `KeyCodeWrapper::into_iter()` and `Keys::into_iter()` are in-sync.
-            // See `crate::parser::parser.rs` for more details.
+            // See `parser.rs` for more details.
             let pressed_key = hashmap.get(&(index as u8));
 
             for (entity, key, mut transform) in query.iter_mut() {
